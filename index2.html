@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Learn with tayang</title>
+</head>
+<body>
+    <h1 id="judul">Game With Ayang</h1>
+    <div class="container">     
+        <h3 id="question"></h3>
+        <input type="radio" name="answer" data-id="0" id="answer0">
+        <label for="answer0" id="answerText0"></label>
+        <input type="radio" name="answer" data-id="1" id="answer1">
+        <label for="answer1" id="answerText1"></label>
+        <input type="radio" name="answer" data-id="2" id="answer2">
+        <label for="answer2" id="answerText2"></label>
+        <input type="radio" name="answer" data-id="3" id="answer3">
+        <label for="answer3" id="answerText3"></label>
+    </div>
+    <div class="btn">
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="previousQuestion()">Previous</button>
+    </div>
+
+    <script>
+        const DB_QUIZ = [
+            {
+                question: "What is ur ayang's hobby?",
+                answers: ['Eating', 'Listening', 'Coding', 'Reading']
+            },
+            {
+                question: "What is his favorite food?",
+                answers: ['FriedChicken', 'Pizza', 'Tempe', 'Tofu'] 
+            },
+            {
+                question: "What place does he love?",
+                answers: ['Garden', 'House', 'Museum', 'Mall'] 
+            }
+        ]
+
+        const CORRECT_ANSWER = [2, 3, 1]
+        
+        let current_q = 0
+        let total_score = 0
+        let saved_answer = []
+
+        document.addEventListener("DOMContentLoaded", function(event){
+            setupQuestion()
+        });
+
+        function setupQuestion() {
+            document.getElementById('question').innerText = DB_QUIZ[current_q]['question']
+            document.getElementById('answerText0').innerText = DB_QUIZ[current_q]['answers'][0]
+            document.getElementById('answerText1').innerText = DB_QUIZ[current_q]['answers'][1]
+            document.getElementById('answerText2').innerText = DB_QUIZ[current_q]['answers'][2]
+            document.getElementById('answerText3').innerText = DB_QUIZ[current_q]['answers'][3]
+        }
+
+        function nextQuestion() {
+            current_q++
+            saveAnswer()
+            if(current_q > DB_QUIZ.length - 1)
+                stopQuiz()
+
+            resetState()
+            setupQuestion()
+        }
+
+        function previousQuestion() {
+            current_q--
+            setupQuestion()
+        }
+
+
+        function resetState(){
+            document.querySelector('input[name="answer"]:checked').checked = false
+        }
+
+        function stopQuiz() {
+            checkScore()
+            alert('Finish! ur score is ' +total_score)
+            return
+        }
+
+        function saveAnswer(){
+            const answer = document.querySelector('input[name="answer"]:checked')
+            if (answer != null) {
+                saved_answer.push(parseInt(answer.getAttribute('data-id')))
+            } else {
+                saved_answer.push(0)
+            }
+        }
+
+        function checkScore(){
+            for(i = 0; i < saved_answer.length; i++) {
+                if(saved_answer[i] == CORRECT_ANSWER[i])
+                    total_score += 100
+            }
+        }
+
+
+    </script>
+</body>
+</html>
